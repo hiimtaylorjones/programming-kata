@@ -50,13 +50,13 @@ class TestPrice < Test::Unit::TestCase
     assert_equal(190, price("DABABA"))
   end
 
-  # def test_incremental
-  #   co = CheckOut.new(RULES)
-  #   assert_equal(  0, co.total)
-  #   co.scan("A");  assert_equal( 50, co.total)
-  #   co.scan("B");  assert_equal( 80, co.total)
-  #   co.scan("A");  assert_equal(130, co.total)
-  #   co.scan("A");  assert_equal(160, co.total)
-  #   co.scan("B");  assert_equal(175, co.total)
-  # end
+  def test_incremental
+    co = CheckOut.new(RULES)
+    assert_equal(  0, co.total)
+    co.scan("A");  assert_equal( 50, co.total)
+    co.scan("B");  assert_equal( 80, co.total)
+    co.scan("A");  assert_equal(130, co.total)
+    co.scan("A");  assert_equal(160, co.total)
+    co.scan("B");  assert_equal(175, co.total)
+  end
 end
