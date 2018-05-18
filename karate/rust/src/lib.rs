@@ -1,7 +1,45 @@
 #[cfg(test)]
+
+pub fn chop(int: i32, array: &mut [i32]) -> i32{
+    let mut count = 0;
+    for x in array.iter() {
+        if x == &int {
+            return count;
+        }
+        count += 1;
+    }
+    return -1;
+}
+
 mod tests {
+    use super::*;
     #[test]
     fn it_works() {
         assert_eq!(2 + 2, 4);
+    }
+
+    #[test]
+    fn test_chop() {
+        assert_eq!(-1, chop(3, &mut []));
+        assert_eq!(-1, chop(3, &mut [1]));
+        assert_eq!(0,  chop(1, &mut [1]));
+        //
+        // assert_eq!(0,  chop(1, [1, 3, 5]));
+        // assert_eq!(1,  chop(3, [1, 3, 5]));
+        // assert_eq!(2,  chop(5, [1, 3, 5]));
+        // assert_eq!(-1, chop(0, [1, 3, 5]));
+        // assert_eq!(-1, chop(2, [1, 3, 5]));
+        // assert_eq!(-1, chop(4, [1, 3, 5]));
+        // assert_eq!(-1, chop(6, [1, 3, 5]));
+        // //
+        // assert_eq!(0,  chop(1, [1, 3, 5, 7]));
+        // assert_eq!(1,  chop(3, [1, 3, 5, 7]));
+        // assert_eq!(2,  chop(5, [1, 3, 5, 7]));
+        // assert_eq!(3,  chop(7, [1, 3, 5, 7]));
+        // assert_eq!(-1, chop(0, [1, 3, 5, 7]));
+        // assert_eq!(-1, chop(2, [1, 3, 5, 7]));
+        // assert_eq!(-1, chop(4, [1, 3, 5, 7]));
+        // assert_eq!(-1, chop(6, [1, 3, 5, 7]));
+        // assert_eq!(-1, chop(8, [1, 3, 5, 7]));
     }
 }
