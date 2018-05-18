@@ -28,7 +28,7 @@ Test Data
 Here is the Test::Unit code I used when developing my methods. Feel free to add to it. The tests assume that array indices start at zero. You’ll probably have to do a couple of global search-and-replaces to make this compile in your language of choice (unless your enlightened choice happens to be Ruby).
 
 ```rust
-#[test]
+  #[test]
   fn test_chop() {
       assert_eq!(-1, chop(3, &mut []));
       assert_eq!(-1, chop(3, &mut [1]));
