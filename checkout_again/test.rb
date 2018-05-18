@@ -4,8 +4,27 @@ require "test/unit"
 class TestPrice < Test::Unit::TestCase
 
   RULES = {
-    
-  }
+    A: {
+      price: 50,
+      special: {
+        units: 3,
+        price: 130
+      }
+    },
+    B: {
+      price: 30,
+      special: {
+        units: 3,
+        price: 130
+      }
+    },
+    C: {
+      price: 20
+    },
+    D: {
+      price: 15
+    }
+  }.freeze
 
   def price(goods)
     co = CheckOut.new(RULES)
