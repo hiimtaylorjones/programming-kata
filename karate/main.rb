@@ -1,4 +1,5 @@
 require "test/unit/assertions"
+require "benchmark"
 include Test::Unit::Assertions
 
 def chop(int, array)
@@ -15,7 +16,7 @@ def binary_chop(int, array)
   thread_1 = Thread.new { search_array(int, array[0..half]) }
   thread_2 = nil
   if half != 0
-    thread_2 = Thread.new { search_back_array(half, array[half..array.length], half) }
+    thread_2 = Thread.new { search_array(int, array[half..array.length], half) }
   end
 
   if thread_1.value != -1
@@ -35,30 +36,19 @@ def binary_chop(int, array)
   end
 end
 
-def search_array(int, array)
+def search_array(int, array, add_by=0)
   array.each_index do |index|
     if array[index] == int
-      return index
-    end
-  end
-  return -1
-end
-
-def search_back_array(int, array, add_by)
-  array.each_index do |index|
-    if array[index] == int
-      return index + 2
+      return index + add_by
     end
   end
   return -1
 end
 
 def test_chop
-  puts "STARTING TESTS"
   assert_equal(-1, chop(3, []))
   assert_equal(-1, chop(3, [1]))
   assert_equal(0,  chop(1, [1]))
-  puts "Part 1 Passed"
   #
   assert_equal(0,  chop(1, [1, 3, 5]))
   assert_equal(1,  chop(3, [1, 3, 5]))
@@ -67,7 +57,6 @@ def test_chop
   assert_equal(-1, chop(2, [1, 3, 5]))
   assert_equal(-1, chop(4, [1, 3, 5]))
   assert_equal(-1, chop(6, [1, 3, 5]))
-  puts "Part 2 Passed"
   #
   assert_equal(0,  chop(1, [1, 3, 5, 7]))
   assert_equal(1,  chop(3, [1, 3, 5, 7]))
@@ -78,16 +67,22 @@ def test_chop
   assert_equal(-1, chop(4, [1, 3, 5, 7]))
   assert_equal(-1, chop(6, [1, 3, 5, 7]))
   assert_equal(-1, chop(8, [1, 3, 5, 7]))
-  puts "ALL TESTS PASSED"
+
+  big_array = []
+  count = 0
+  15000.times do
+    big_array.push(count)
+    count = count + 1
+  end
+
+  assert_equal(13500, chop(13500, big_array))
 end
 
 def test_binary_chop
-  puts "\nSTARTING TESTS"
   assert_equal(-1, binary_chop(3, []))
   assert_equal(-1, binary_chop(3, [1]))
   assert_equal(0,  binary_chop(1, [1]))
-  puts "Part 1 Passed"
-  #
+
   assert_equal(0,  binary_chop(1, [1, 3, 5]))
   assert_equal(1,  binary_chop(3, [1, 3, 5]))
   assert_equal(2,  binary_chop(5, [1, 3, 5]))
@@ -95,7 +90,6 @@ def test_binary_chop
   assert_equal(-1, binary_chop(2, [1, 3, 5]))
   assert_equal(-1, binary_chop(4, [1, 3, 5]))
   assert_equal(-1, binary_chop(6, [1, 3, 5]))
-  puts "Part 2 Passed"
   #
   assert_equal(0,  binary_chop(1, [1, 3, 5, 7]))
   assert_equal(1,  binary_chop(3, [1, 3, 5, 7]))
@@ -106,9 +100,22 @@ def test_binary_chop
   assert_equal(-1, binary_chop(4, [1, 3, 5, 7]))
   assert_equal(-1, binary_chop(6, [1, 3, 5, 7]))
   assert_equal(-1, binary_chop(8, [1, 3, 5, 7]))
-  puts "ALL TESTS PASSED"
+
+  big_array = []
+  count = 0
+  15000.times do
+    big_array.push(count)
+    count = count + 1
+  end
+
+  assert_equal(13500, binary_chop(13500, big_array))
 end
 
-
-test_chop
-test_binary_chop
+Benchmark.bm do |benchmark|
+  benchmark.report("Chop") do
+    test_chop
+  end
+  benchmark.report("Bhop") do
+    test_binary_chop
+  end
+end
