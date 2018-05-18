@@ -7,6 +7,7 @@ class CheckOut
     @rules = rules
     @total = 0
     @order = ""
+    puts "\nNew Checkout Instance!"
   end
 
   def scan(item)
@@ -28,13 +29,20 @@ private
   def check_for_special(item)
     symbol = item.to_sym
     @rules[symbol].has_key?(:special) &&
-      @rules[symbol][:special][:units] == @order.count(item)
+      @order.count(item) > 1 &&
+      ((@order.count(item) % @rules[symbol][:special][:units]) == 0)
   end
 
   def apply_special(item)
     symbol = item.to_sym
-    @total = @total - ((@order.count(item) - 1) * @rules[symbol][:price])
-    @total = @total + @rules[symbol][:special][:price]
+    subtracting = ((@rules[symbol][:special][:units] - 1) * @rules[symbol][:price])
+    puts "Subtracting #{subtracting} from total"
+    @total = @total - subtracting
+    puts "Previous total: #{@total}"
+    special_price = @rules[symbol][:special][:price]
+    puts "Adding special price of #{special_price}"
+    @total = @total + special_price
+    puts "New total: #{@total}"
   end
 
 end
